@@ -1,4 +1,4 @@
-import time
+# import time
 import keyboard
 
 # Variables
@@ -397,9 +397,9 @@ while run:
     
     # Key
     
-    if keyboard.key_pressed('esc'):
-      graph = False
-      break
+    #if keyboard.key_pressed('esc'):
+    #  graph = False
+    #  break
     
     # Read
     
