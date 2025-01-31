@@ -17,6 +17,7 @@ values = {
 
   'spf': 1.0,
   'logLen': 20.0,
+  'numLen': 6.0,
 
   'barMin': 20.0,
   'barMax': 100.0,
@@ -44,15 +45,15 @@ types = {
              [],
              'CPU Clocking in GHz. "cpu0" can be interchanged for different CPU'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
-             1048576,
-             0,
-             [],
-             'MB received. "eth0" can be interchanged for different network device'],
+             1,
+             2,
+             [''],
+             'Bytes received. "eth0" can be interchanged for different network device'],
   'nettx': ['/sys/class/net/eth0/statistics/tx_bytes',
-             1048576,
-             0,
-             [],
-             'MB transmitted. "eth0" can be interchanged for different network device']
+             1,
+             2,
+             [''],
+             'Bytes transmitted. "eth0" can be interchanged for different network device']
 }
 
 colorKey = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
@@ -106,7 +107,9 @@ def strToArray(string):
   return out
   
 
-def lenNum(string, length): # Adds 0's to string until at length
+def lenNum(string, length): # Makes number string length
+  
+  string = string[:length]
   
   add = length - len(string)
   
@@ -177,9 +180,24 @@ def getCont(path, method, methodInfo):
   
   out = 0
   
-  if method == 0:
+  if int(method) == 0:
     
     with open(path, 'r') as file: out = strToFloat(file.read())
+    
+  
+  elif int(method) == 1:
+    
+    pass
+    
+  
+  elif int(method) == 2:
+    
+    with open(path, 'r') as file: new = strToFloat(file.read())
+    
+    out = new - strToFloat(values['methodInfo'][0])
+    out = out / values['spf']
+    
+    values['methodInfo'][0] = str(new)
     
   
   return out / values['scale']
@@ -190,11 +208,13 @@ print('Inputs:')
 print('  Case does not matter')
 print('  Numbers are validated before use')
 print('    (if logLen is set to -5.2 it will be treated as 1)')
+print('  If there is a error with getCont(), 0 is returned')
 print()
 print('  "quit": Quits')
 print('  "run": Run graph loop (must kill program to stop)')
 print('  "spf": Seconds per frame for graph, Default: 1')
 print('  "logLen": How many lines are recorded, Default: 20')
+print('  "numLen": Length of ending number, Default: 6')
 print()
 print('  "path": File path for data file, Defualt: (for thermal)')
 print('  "scale": Scale of return value, Default: 1000')
@@ -256,7 +276,9 @@ while True:
   elif inp == 'type?':
     for key in types: print(key + ': ' + types[key][0] +
                             ', scale: ' + str(types[key][1]) +
-                            '\n  ' + types[key][2])
+                            ', method: ' + str(types[key][2]) +
+                            ', methodInfo: ' + str(types[key][3]) +
+                            '\n  ' + types[key][4])
   
   elif inp == 'c?':
     for i in range(len(colorKey)): print(colorKey[i] + ': ' + str(i+31))
@@ -283,6 +305,13 @@ while True:
           
           values['scale'] = types[key][1]
           print('"scale" set to "' + str(values['scale']) + '"')
+          
+          values['method'] = types[key][2]
+          print('"method" set to "' + str(values['method']) + '"')
+          
+          values['methodInfo'] = types[key][3]
+          print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
+          
         
       
     
@@ -317,11 +346,11 @@ while True:
   
   elif inp == "methodinfo":
     
-    valInp = input('"methodInp: ')
+    valInp = input('"methodInfo": ')
     print()
     
     values['methodInfo'] = strToArray(valInp)
-    print('"methodInfo" set to "' + values['methodInfo'] + '"')
+    print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
     
   
   # All Other
@@ -356,7 +385,9 @@ while run:
   
   # Read
   
-  cont = getCont(values['path'], values['method'], values['methodInfo'])
+  try:
+    cont = getCont(values['path'], values['method'], values['methodInfo'])
+  except: cont = 0
   
   # Print
   
@@ -371,7 +402,9 @@ while run:
                values['barMedC'],
                values['barHiC'])
   
-  newLog = newLog + ' | ' + lenNum(str(cont), 5) + '  '
+  newLog = (newLog + ' | ' +
+            lenNum(str(cont), int(max(values['numLen'], 0))) +
+            '  ')
   
   contLog = printLog(contLog, newLog)
   
