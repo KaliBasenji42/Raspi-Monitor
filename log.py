@@ -1,10 +1,13 @@
 import time
+import keyboard
 
 # Variables
 
 run = True
 
 cont = 0
+
+graph = True # Should run Graph Loop
 
 # Defaults
 
@@ -13,7 +16,7 @@ values = {
   'path': '/sys/class/thermal/thermal_zone0/temp',
   'scale': 1000,
   'method': 0,
-  'methodInfo': [],
+  'methodInfo': [''],
 
   'spf': 1.0,
   'logLen': 20.0,
@@ -37,12 +40,12 @@ types = {
   'thermal': ['/sys/class/thermal/thermal_zone0/temp',
               1000,
               0,
-              [],
+              [''],
               'CPU temp in Celcius'],
   'cpughz': ['/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq',
              1000000,
              0,
-             [],
+             [''],
              'CPU Clocking in GHz. "cpu0" can be interchanged for different CPU'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
@@ -245,170 +248,186 @@ print('  "c?": Print color key')
 try:
   with open(values['path'], 'r') as file: pass
 except:
-  print('\nUnable to Open :/')
-  run = False
+  print('\nUnable to Open file :/')
+  graph = False
 
-# Input Loop
-
-while True:
-  
-  print()
-  inp = input('Input: ')
-  print()
-  
-  inp = inp.lower()
-  
-  # Quit and Run
-  
-  if inp == 'quit':
-    run = False
-    break
-  
-  elif inp == 'run':
-    
-    if run: break
-    
-    print('Error')
-    
-  
-  # Info
-  
-  elif inp == 'type?':
-    for key in types: print(key + ': ' + types[key][0] +
-                            ', scale: ' + str(types[key][1]) +
-                            ', method: ' + str(types[key][2]) +
-                            ', methodInfo: ' + str(types[key][3]) +
-                            '\n  ' + types[key][4])
-  
-  elif inp == 'c?':
-    for i in range(len(colorKey)): print(colorKey[i] + ': ' + str(i+31))
-  
-  # Type
-  
-  elif inp == 'type':
-    
-    valInp = input('"type": ')
-    print()
-    
-    for key in types:
-      
-      if valInp == key:
-        
-        try:
-          with open(types[key][0], 'r') as file: pass
-        except:
-          print('Unable to Open :/')
-          run = False
-        else:
-          values['path'] = types[key][0]
-          print('"path" set to "' + values['path'] + '"')
-          
-          values['scale'] = types[key][1]
-          print('"scale" set to "' + str(values['scale']) + '"')
-          
-          values['method'] = types[key][2]
-          print('"method" set to "' + str(values['method']) + '"')
-          
-          values['methodInfo'] = types[key][3]
-          print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
-          
-        
-      
-    
-  
-  # String Input
-  
-  elif inp == 'path':
-    
-    valInp = input('"path": ')
-    print()
-    
-    try:
-      with open(inp, 'r') as file: pass
-    except:
-      print('Unable to Open :/')
-      run = False
-    else:
-      values['path'] = valInp
-      print('"path" set to "' + values['path'] + '"')
-    
-  
-  elif inp == 'barchr':
-    
-    valInp = input('"barChr": ')
-    print()
-    
-    values['barChr'] = (valInp + ' ')[0]
-    print('"barChr" set to "' + values['barChr'] + '"')
-    
-  
-  # Method Info / Array Input
-  
-  elif inp == "methodinfo":
-    
-    valInp = input('"methodInfo": ')
-    print()
-    
-    values['methodInfo'] = strToArray(valInp)
-    print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
-    
-  
-  # All Other
-  
-  else:
-    
-    for key in values:
-      
-      if inp == key.lower():
-        
-        valInp = input('"' + key + '": ')
-        print()
-        
-        values[key] = strToFloat(valInp)
-        
-        print('"' + key +'" set to "' + str(values[key]) + '"')
-        
-    
-  
-
-# Preloop
-
-contLog = [''] * int(max(values['logLen'], 1))
-
-print('Press [CTRL] + [C] to stop')
-
-for entry in contLog: print('')
-
-# Graph Loop
+# Main Loop
 
 while run:
   
-  # Read
+  # Inupt Loop
   
-  try:
-    cont = getCont(values['path'], values['method'], values['methodInfo'])
-  except: cont = 0
+  while True:
+    
+    print()
+    inp = input('Input: ')
+    print()
+    
+    inp = inp.lower()
+    
+    # Quit and Run
+    
+    if inp == 'quit':
+      run = False
+      graph = False
+      break
+    
+    elif inp == 'run':
+      
+      if graph: break
+      
+      print('Error')
+      
+    
+    # Info
+    
+    elif inp == 'type?':
+      for key in types: print(key + ': ' + types[key][0] +
+                              ', scale: ' + str(types[key][1]) +
+                              ', method: ' + str(types[key][2]) +
+                              ', methodInfo: ' + str(types[key][3]) +
+                              '\n  ' + types[key][4])
+    
+    elif inp == 'c?':
+      for i in range(len(colorKey)): print(colorKey[i] + ': ' + str(i+31))
+    
+    # Type
+    
+    elif inp == 'type':
+      
+      valInp = input('"type": ')
+      print()
+      
+      for key in types:
+        
+        if valInp == key:
+          
+          try:
+            with open(types[key][0], 'r') as file: pass
+          except:
+            print('Unable to Open :/')
+            graph = False
+          else:
+            values['path'] = types[key][0]
+            print('"path" set to "' + values['path'] + '"')
+            
+            values['scale'] = types[key][1]
+            print('"scale" set to "' + str(values['scale']) + '"')
+            
+            values['method'] = types[key][2]
+            print('"method" set to "' + str(values['method']) + '"')
+            
+            values['methodInfo'] = types[key][3]
+            print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
+            
+            graph = True
+            
+          
+        
+      
+    
+    # String Input
+    
+    elif inp == 'path':
+      
+      valInp = input('"path": ')
+      print()
+      
+      try:
+        with open(inp, 'r') as file: pass
+      except:
+        print('Unable to Open :/')
+        graph = False
+      else:
+        values['path'] = valInp
+        print('"path" set to "' + values['path'] + '"')
+        graph = True
+      
+    
+    elif inp == 'barchr':
+      
+      valInp = input('"barChr": ')
+      print()
+      
+      values['barChr'] = (valInp + ' ')[0]
+      print('"barChr" set to "' + values['barChr'] + '"')
+      
+    
+    # Method Info / Array Input
+    
+    elif inp == "methodinfo":
+      
+      valInp = input('"methodInfo": ')
+      print()
+      
+      values['methodInfo'] = strToArray(valInp)
+      print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
+      
+    
+    # All Other
+    
+    else:
+      
+      for key in values:
+        
+        if inp == key.lower():
+          
+          valInp = input('"' + key + '": ')
+          print()
+          
+          values[key] = strToFloat(valInp)
+          
+          print('"' + key +'" set to "' + str(values[key]) + '"')
+          
+        
+      
+    
   
-  # Print
+  # Pre-Graph
   
-  newLog = bar(cont, 
-               values['barMin'],
-               values['barMax'],
-               values['barLen'],
-               values['barMed'],
-               values['barHi'],
-               values['barChr'],
-               values['barLoC'],
-               values['barMedC'],
-               values['barHiC'])
+  contLog = [''] * int(max(values['logLen'], 1))
   
-  newLog = (newLog + ' | ' +
-            lenNum(str(cont), int(max(values['numLen'], 0))) +
-            '  ')
+  print('Hold [ESC] to stop (at frame end)')
   
-  contLog = printLog(contLog, newLog)
+  for entry in contLog: print('')
   
-  # Time
+  # Graph Loop
   
-  time.sleep(max(values['spf'], 0))
+  while graph:
+    
+    # Key
+    
+    if keyboard.key_pressed('esc'):
+      graph = False
+      break
+    
+    # Read
+    
+    try:
+      cont = getCont(values['path'], values['method'], values['methodInfo'])
+    except: cont = 0
+    
+    # Print
+    
+    newLog = bar(cont, 
+                 values['barMin'],
+                 values['barMax'],
+                 values['barLen'],
+                 values['barMed'],
+                 values['barHi'],
+                 values['barChr'],
+                 values['barLoC'],
+                 values['barMedC'],
+                 values['barHiC'])
+    
+    newLog = (newLog + ' | ' +
+              lenNum(str(cont), int(max(values['numLen'], 0))) +
+              '  ')
+    
+    contLog = printLog(contLog, newLog)
+    
+    # Time
+    
+    time.sleep(max(values['spf'], 0))
+    
   
