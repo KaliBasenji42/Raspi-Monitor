@@ -1,5 +1,6 @@
-# import time
-import keyboard
+import time
+import sys
+import select
 
 # Variables
 
@@ -7,7 +8,10 @@ run = True
 
 cont = 0
 
-graph = True # Should run Graph Loop
+runGraph = True
+graphing = False
+
+settingsFile = 'settings.txt'
 
 # Defaults
 
@@ -204,6 +208,15 @@ def getCont(path, method, methodInfo):
     
   
   return out / values['scale']
+  
+def detectKey():
+  
+  if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+    key = sys.stdin.read(1)
+    return key
+  
+  return None
+  
 
 # Instructions
 
@@ -218,6 +231,7 @@ print('  "run": Run graph loop (must kill program to stop)')
 print('  "spf": Seconds per frame for graph, Default: 1')
 print('  "logLen": How many lines are recorded, Default: 20')
 print('  "numLen": Length of ending number, Default: 6')
+print('  "import": Import graph settings from settings.txt')
 print()
 print('  "path": File path for data file, Defualt: (for thermal)')
 print('  "scale": Scale of return value, Default: 1000')
@@ -249,11 +263,13 @@ try:
   with open(values['path'], 'r') as file: pass
 except:
   print('\nUnable to Open file :/')
-  graph = False
+  runGraph = False
 
 # Main Loop
 
 while run:
+  
+  graphing = False
   
   # Inupt Loop
   
@@ -269,14 +285,29 @@ while run:
     
     if inp == 'quit':
       run = False
-      graph = False
+      runGraph = False
       break
     
     elif inp == 'run':
       
-      if graph: break
+      if runGraph: break
       
       print('Error')
+      
+    
+    # import
+    
+    elif inp == 'import':
+      
+      try:
+        with open(settingsFile, 'r') as file: pass
+      except:
+        print('\nUnable to Open file :/')
+      
+      else:
+        
+        print('WIP')
+        
       
     
     # Info
@@ -306,7 +337,7 @@ while run:
             with open(types[key][0], 'r') as file: pass
           except:
             print('Unable to Open :/')
-            graph = False
+            runGraph = False
           else:
             values['path'] = types[key][0]
             print('"path" set to "' + values['path'] + '"')
@@ -320,7 +351,7 @@ while run:
             values['methodInfo'] = types[key][3]
             print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
             
-            graph = True
+            runGraph = True
             
           
         
@@ -337,11 +368,11 @@ while run:
         with open(inp, 'r') as file: pass
       except:
         print('Unable to Open :/')
-        graph = False
+        runGraph = False
       else:
         values['path'] = valInp
         print('"path" set to "' + values['path'] + '"')
-        graph = True
+        runGraph = True
       
     
     elif inp == 'barchr':
@@ -387,19 +418,20 @@ while run:
   
   contLog = [''] * int(max(values['logLen'], 1))
   
-  print('Hold [ESC] to stop (at frame end)')
+  print('Enter "q" to return to Input')
   
   for entry in contLog: print('')
   
+  graphing = True
+  
   # Graph Loop
   
-  while graph:
+  while runGraph:
     
     # Key
     
-    #if keyboard.key_pressed('esc'):
-    #  graph = False
-    #  break
+    if detectKey() == 'q':
+      break
     
     # Read
     
