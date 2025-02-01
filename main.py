@@ -13,6 +13,8 @@ graphing = False
 
 settingsFile = 'settings.txt'
 
+debug = ''
+
 # Defaults
 
 values = {
@@ -46,11 +48,11 @@ types = {
               0,
               [''],
               'CPU temp in Celcius'],
-  'cpughz': ['/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq',
-             1000000,
-             0,
-             [''],
-             'CPU Clocking in GHz. "cpu0" can be interchanged for different CPU'],
+  'cpuload': ['/proc/stat',
+             0.01,
+             1,
+             ['0', '3'],
+             'Overal CPU load. '],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
              2,
@@ -194,7 +196,9 @@ def getCont(path, method, methodInfo):
   
   elif int(method) == 1:
     
-    pass
+    with open(path, 'r') as file: cont = strToFloat(file.read())
+    
+    debug = cont[int(values['methodInfo'][0])]
     
   
   elif int(method) == 2:
@@ -243,7 +247,7 @@ instructions = [
   '    2: Divide by time, (new - old) / "spf"',
   '  "methodInfo": Other info needed for gathering data, Default: []',
   '    0: []',
-  '    1: [totalName, rawName]',
+  '    1: [line, pos]',
   '    2: [old]',
   '  "type": Looks up paths saved in list for data file',
   '  "type?": Print types in array noted above',
