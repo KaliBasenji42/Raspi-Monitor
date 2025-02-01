@@ -13,7 +13,7 @@ graphing = False
 
 settingsFile = 'settings.txt'
 
-debug = 'Test'
+debug = ''
 
 # Defaults
 
@@ -370,7 +370,7 @@ while run:
       print()
       
       try:
-        with open(inp, 'r') as file: pass
+        with open(valInp, 'r') as file: pass
       except:
         print('Unable to Open :/')
         runGraph = False
