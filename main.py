@@ -50,17 +50,17 @@ types = {
               'CPU temp in Celcius'],
   'cpuload': ['/proc/stat',
              0.01,
-             2,
+             1,
              ['0', '3'],
              'Total CPU load, methodInfo[0] can be changed to change core'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
-             1,
+             2,
              [''],
              'Bytes received. "eth0" can be interchanged for different network device'],
   'nettx': ['/sys/class/net/eth0/statistics/tx_bytes',
              1,
-             1,
+             2,
              [''],
              'Bytes transmitted. "eth0" can be interchanged for different network device']
 }
@@ -175,7 +175,8 @@ def printLog(log, new):
   log.pop(0)
   
   log.append(new)
-  
+
+  global debug
   if debug != '': log[0] = debug
   
   # Print
@@ -198,22 +199,22 @@ def getCont(path, method):
   
   elif int(method) == 1:
     
-    with open(path, 'r') as file: new = strToFloat(file.read())
-    
-    out = new - strToFloat(values['methodInfo'][0])
-    out = out / values['spf']
-    
-    values['methodInfo'][0] = str(new)
-    
-  
-  elif int(method) == 2:
-    
     with open(path, 'r') as file: cont = strToFloat(file.read())
     
     line = strToArray(cont[0])
     
     global debug
     debug = str(line)
+    
+  
+  elif int(method) == 2:
+    
+    with open(path, 'r') as file: new = strToFloat(file.read())
+    
+    out = new - strToFloat(values['methodInfo'][0])
+    out = out / values['spf']
+    
+    values['methodInfo'][0] = str(new)
     
   
   return out / values['scale']
@@ -229,42 +230,47 @@ def detectKey():
 
 # Instructions
 
-print('Inputs:')
-print('  Case does not matter')
-print('  Numbers are validated before use')
-print('    (if logLen is set to -5.2 it will be treated as 1)')
-print('  If there is a error with getCont(), 0 is returned')
-print()
-print('  "quit": Quits')
-print('  "run": Run graph loop (must wait until end of loop to stop)')
-print('  "spf": Seconds per frame for graph, Default: 1')
-print('  "logLen": How many lines are recorded, Default: 20')
-print('  "numLen": Length of ending number, Default: 6')
-print('  "import": Import graph settings from settings.txt')
-print()
-print('  "path": File path for data file, Defualt: (for thermal)')
-print('  "scale": Scale of return value, Default: 1000')
-print('  "method": Method for gathering info, Default: 0')
-print('    0: Raw')
-print('    1: Divide by time, (new - old) / "spf"')
-print('    2: Used for cpuload, (total - val) / total')
-print('  "methodInfo": Other info needed for gathering data, Default: []')
-print('    0: []')
-print('    1: [old]')
-print('    2: [line, val]')
-print('  "type": Looks up paths saved in list for data file')
-print('  "type?": Print types in array noted above')
-print()
-print('  "barMin": Default: 20')
-print('  "barMax": Default: 100')
-print('  "barLen": number of chars in bar, Default: 50')
-print('  "barMed": Medium Threshold (0 to 1), Default: 0.7')
-print('  "barHi": High Threshold (0 to 1), Default: 0.85')
-print('  "barChr": Character used in bar, Default: "="')
-print('  "barLoC": Low color, Default: 32 (green)')
-print('  "barMedC": Medium color, Default: 33 (yellow)')
-print('  "barHiC": High color, Default: 31 (red)')
-print('  "c?": Print color key')
+instructions = [
+  'Inputs:',
+  '  Case does not matter',
+  '  Numbers are validated before use',
+  '    (if logLen is set to -5.2 it will be treated as 1)',
+  '  If there is a error with getCont(), 0 is returned',
+  '',
+  '  "quit": Quits',
+  '  "run": Run graph loop (must kill program to stop)',
+  '  "spf": Seconds per frame for graph, Default: 1',
+  '  "logLen": How many lines are recorded, Default: 20',
+  '  "numLen": Length of ending number, Default: 6',
+  '  "import": Import graph settings from settings.txt',
+  '  "?": Reprint this',
+  '',
+  '  "path": File path for data file, Defualt: (for thermal)',
+  '  "scale": Scale of return value, Default: 1000',
+  '  "method": Method for gathering info, Default: 0',
+  '    0: Raw',
+  '    1: Inverse, (total - raw) / total',
+  '    2: Divide by time, (new - old) / "spf"',
+  '  "methodInfo": Other info needed for gathering data, Default: []',
+  '    0: []',
+  '    1: [line, pos]',
+  '    2: [old]',
+  '  "type": Looks up paths saved in list for data file',
+  '  "type?": Print types in array noted above',
+  '',
+  '  "barMin": Default: 20',
+  '  "barMax": Default: 100',
+  '  "barLen": number of chars in bar, Default: 50',
+  '  "barMed": Medium Threshold (0 to 1), Default: 0.7',
+  '  "barHi": High Threshold (0 to 1), Default: 0.85',
+  '  "barChr": Character used in bar, Default: "="',
+  '  "barLoC": Low color, Default: 32 (green)',
+  '  "barMedC": Medium color, Default: 33 (yellow)',
+  '  "barHiC": High color, Default: 31 (red)',
+  '  "c?": Print color key'
+]
+
+for entry in instructions: print(entry)
 
 # Try File
 
@@ -320,6 +326,9 @@ while run:
       
     
     # Info
+    
+    elif inp == '?':
+      for entry in instructions: print(entry)
     
     elif inp == 'type?':
       for key in types: print(key + ': ' + types[key][0] +
