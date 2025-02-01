@@ -175,6 +175,9 @@ def printLog(log, new):
   log.pop(0)
   
   log.append(new)
+
+  global debug
+  if debug != '': log[0] = debug
   
   # Print
   
