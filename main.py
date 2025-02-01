@@ -13,6 +13,8 @@ graphing = False
 
 settingsFile = 'settings.txt'
 
+debug = ''
+
 # Defaults
 
 values = {
@@ -46,19 +48,19 @@ types = {
               0,
               [''],
               'CPU temp in Celcius'],
-  'cpughz': ['/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq',
-             1000000,
-             0,
-             [''],
-             'CPU Clocking in GHz. "cpu0" can be interchanged for different CPU'],
+  'cpuload': ['/proc/stat',
+             0.01,
+             2,
+             ['0', '3'],
+             'Total CPU load, methodInfo[0] can be changed to change core'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
-             2,
+             1,
              [''],
              'Bytes received. "eth0" can be interchanged for different network device'],
   'nettx': ['/sys/class/net/eth0/statistics/tx_bytes',
              1,
-             2,
+             1,
              [''],
              'Bytes transmitted. "eth0" can be interchanged for different network device']
 }
@@ -174,6 +176,8 @@ def printLog(log, new):
   
   log.append(new)
   
+  if debug != '': log[0] = debug
+  
   # Print
   
   for entry in log: print('\033[F', end = '')
@@ -183,7 +187,7 @@ def printLog(log, new):
   return log
   
 
-def getCont(path, method, methodInfo):
+def getCont(path, method):
   
   out = 0
   
@@ -194,17 +198,22 @@ def getCont(path, method, methodInfo):
   
   elif int(method) == 1:
     
-    pass
-    
-  
-  elif int(method) == 2:
-    
     with open(path, 'r') as file: new = strToFloat(file.read())
     
     out = new - strToFloat(values['methodInfo'][0])
     out = out / values['spf']
     
     values['methodInfo'][0] = str(new)
+    
+  
+  elif int(method) == 2:
+    
+    with open(path, 'r') as file: cont = strToFloat(file.read())
+    
+    line = strToArray(cont[0])
+    
+    global debug
+    debug = str(line)
     
   
   return out / values['scale']
@@ -227,7 +236,7 @@ print('    (if logLen is set to -5.2 it will be treated as 1)')
 print('  If there is a error with getCont(), 0 is returned')
 print()
 print('  "quit": Quits')
-print('  "run": Run graph loop (must kill program to stop)')
+print('  "run": Run graph loop (must wait until end of loop to stop)')
 print('  "spf": Seconds per frame for graph, Default: 1')
 print('  "logLen": How many lines are recorded, Default: 20')
 print('  "numLen": Length of ending number, Default: 6')
@@ -237,12 +246,12 @@ print('  "path": File path for data file, Defualt: (for thermal)')
 print('  "scale": Scale of return value, Default: 1000')
 print('  "method": Method for gathering info, Default: 0')
 print('    0: Raw')
-print('    1: Inverse, (total - raw) / total')
-print('    2: Divide by time, (new - old) / "spf"')
+print('    1: Divide by time, (new - old) / "spf"')
+print('    2: Used for cpuload, (total - val) / total')
 print('  "methodInfo": Other info needed for gathering data, Default: []')
 print('    0: []')
-print('    1: [totalName, rawName]')
-print('    2: [old]')
+print('    1: [old]')
+print('    2: [line, val]')
 print('  "type": Looks up paths saved in list for data file')
 print('  "type?": Print types in array noted above')
 print()
@@ -418,7 +427,7 @@ while run:
   
   contLog = [''] * int(max(values['logLen'], 1))
   
-  print('Enter "q" to return to Input')
+  print('Enter "q" to return to Input (wait until loop has ended)')
   
   for entry in contLog: print('')
   
@@ -436,7 +445,7 @@ while run:
     # Read
     
     try:
-      cont = getCont(values['path'], values['method'], values['methodInfo'])
+      cont = getCont(values['path'], values['method'])
     except: cont = 0
     
     # Print
