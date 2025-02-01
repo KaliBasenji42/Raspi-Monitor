@@ -13,7 +13,7 @@ graphing = False
 
 settingsFile = 'settings.txt'
 
-debug = ''
+debug = 'Test'
 
 # Defaults
 
@@ -22,7 +22,7 @@ values = {
   'path': '/sys/class/thermal/thermal_zone0/temp',
   'scale': 1000,
   'method': 0,
-  'methodInfo': [''],
+  'methodInfo': ['0'],
 
   'spf': 1.0,
   'logLen': 20.0,
@@ -46,23 +46,23 @@ types = {
   'thermal': ['/sys/class/thermal/thermal_zone0/temp',
               1000,
               0,
-              [''],
+              ['0'],
               'CPU temp in Celcius'],
-  'cpuload': ['/proc/stat',
-             0.01,
-             1,
-             ['0', '3'],
-             'Total CPU load, methodInfo[0] can be changed to change core'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
-             2,
-             [''],
+             1,
+             ['0', ''],
              'Bytes received. "eth0" can be interchanged for different network device'],
   'nettx': ['/sys/class/net/eth0/statistics/tx_bytes',
              1,
+             1,
+             ['0', ''],
+             'Bytes transmitted. "eth0" can be interchanged for different network device'],
+  'cpuload': ['/proc/stat',
+             0.01,
              2,
-             [''],
-             'Bytes transmitted. "eth0" can be interchanged for different network device']
+             ['0', '3', '', ''],
+             'Total CPU load as %, methodInfo[0] can be changed to change core']
 }
 
 colorKey = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
@@ -83,37 +83,6 @@ def strToFloat(string):
   
   if string[0] == '-': return -1 * float(numStr)
   else: return float(numStr)
-  
-
-def strToArray(string):
-  
-  out = []
-  
-  var = ''
-  
-  div = ' '
-  
-  string = string + div
-  
-  for i in range(len(string)):
-    
-    if string[i-len(div):i] == div:
-      
-      var = var[:-len(div)]
-      
-      out.append(var)
-      
-      var = ''
-      
-    
-    var += string[i]
-    
-  
-  var = var[:-len(div)]
-  
-  out.append(var)
-  
-  return out
   
 
 def lenNum(string, length): # Makes number string length
@@ -194,27 +163,45 @@ def getCont(path, method):
   
   if int(method) == 0:
     
-    with open(path, 'r') as file: out = strToFloat(file.read())
+    with open(path, 'r') as file: cont = file.readlines()
+    
+    out = strToFloat(cont[int(values['methodInfo'][0])])
     
   
   elif int(method) == 1:
     
-    with open(path, 'r') as file: cont = strToFloat(file.read())
+    with open(path, 'r') as file: cont = file.readlines()
     
-    line = strToArray(cont[0])
+    new = strToFloat(cont[int(values['methodInfo'][0])])
     
-    global debug
-    debug = str(line)
+    out = new - strToFloat(values['methodInfo'][1])
+    out = out / values['spf']
+    
+    values['methodInfo'][1] = str(new)
     
   
   elif int(method) == 2:
     
-    with open(path, 'r') as file: new = strToFloat(file.read())
+    with open(path, 'r') as file: cont = file.readlines()
     
-    out = new - strToFloat(values['methodInfo'][0])
-    out = out / values['spf']
+    line = cont[int(values['methodInfo'][0])][:-1].split()
+    line.pop(0)
     
-    values['methodInfo'][0] = str(new)
+    newTotal = 0
+    for num in line: newTotal += strToFloat(num)
+    
+    newVal = int(line[int(values['methodInfo'][1])])
+    
+    oldTotal = strToFloat(values['methodInfo'][2])
+    oldVal = strToFloat(values['methodInfo'][3])
+    
+    total = (newTotal - oldTotal) / values['spf']
+    val = (newVal - oldVal) / values['spf']
+    
+    out = (total - val) / total
+    
+    values['methodInfo'][2] = str(newTotal)
+    values['methodInfo'][3] = str(newVal)
     
   
   return out / values['scale']
@@ -248,13 +235,13 @@ instructions = [
   '  "path": File path for data file, Defualt: (for thermal)',
   '  "scale": Scale of return value, Default: 1000',
   '  "method": Method for gathering info, Default: 0',
-  '    0: Raw',
-  '    1: Inverse, (total - raw) / total',
-  '    2: Divide by time, (new - old) / "spf"',
-  '  "methodInfo": Other info needed for gathering data, Default: []',
-  '    0: []',
-  '    1: [line, pos]',
-  '    2: [old]',
+  '    0: Raw, file with single value, no conversion needed',
+  '    1: Divide by time, (new - old) / "spf"',
+  '    2: Made for CPU, ((totalPerSecond) - (idlePerSecond)) / totalPerSecond',
+  '  "methodInfo": Other info needed for gathering data, Default: ["0"]',
+  '    0: [line]',
+  '    1: [line, old]',
+  '    2: [line, valPos, oldTotal, oldVal]',
   '  "type": Looks up paths saved in list for data file',
   '  "type?": Print types in array noted above',
   '',
@@ -409,7 +396,7 @@ while run:
       valInp = input('"methodInfo": ')
       print()
       
-      values['methodInfo'] = strToArray(valInp)
+      values['methodInfo'] = valInp.split()
       print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
       
     
@@ -455,7 +442,9 @@ while run:
     
     try:
       cont = getCont(values['path'], values['method'])
-    except: cont = 0
+    except Exception as e:
+      cont = 0
+      debug = str(e)
     
     # Print
     
