@@ -47,7 +47,12 @@ types = {
               1000,
               0,
               ['0'],
-              'CPU temp in Celcius'],
+              'Core temp in Celcius'],
+  'memfr': ['/proc/meminfo',
+              1024,
+              0,
+              ['1'],
+              'Free memory in MB'],
   'netrx': ['/sys/class/net/eth0/statistics/rx_bytes',
              1,
              1,
@@ -62,7 +67,17 @@ types = {
              0.01,
              2,
              ['0', '3', '', ''],
-             'Total CPU load as %, methodInfo[0] can be changed to change core']
+             'Total CPU load as %, methodInfo[0] can be changed to change core'],
+  'diskr': ['/proc/diskstats',
+             1/512,
+             3,
+             ['24', '5', ''],
+             'Disk reads in Bytes (sectors * 512)'],
+  'diskw': ['/proc/diskstats',
+             1/512,
+             3,
+             ['24', '9', ''],
+             'Disk writes in Bytes (sectors * 512)']
 }
 
 colorKey = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
