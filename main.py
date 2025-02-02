@@ -66,7 +66,7 @@ types = {
   'cpuload': ['/proc/stat',
              0.01,
              2,
-             ['0', '3', '', ''],
+             ['1', '4', '', ''],
              'Total CPU load as %, methodInfo[0] can be changed to change core'],
   'diskr': ['/proc/diskstats',
              1/512,
@@ -200,10 +200,8 @@ def getCont(path, method):
     with open(path, 'r') as file: cont = file.readlines()
     
     line = cont[int(values['methodInfo'][0])][:-1].split()
-    line.pop(0)
     
-    newTotal = 0
-    for num in line: newTotal += strToFloat(num)
+    newTotal = sum(float(num) for num in line[1:])
     
     newVal = int(line[int(values['methodInfo'][1])])
     
