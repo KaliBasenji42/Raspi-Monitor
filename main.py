@@ -217,6 +217,22 @@ def getCont(path, method):
     values['methodInfo'][3] = str(newVal)
     
   
+  elif int(method) == 3:
+    
+    with open(path, 'r') as file: cont = file.readlines()
+    
+    line = cont[int(values['methodInfo'][0])][:-1].split()
+    
+    newVal = int(line[int(values['methodInfo'][1])])
+    oldVal = strToFloat(values['methodInfo'][2])
+    
+    val = (newVal - oldVal) / values['spf']
+    
+    out = val
+    
+    values['methodInfo'][2] = str(newVal)
+    
+  
   return out / values['scale']
   
 def detectKey():
