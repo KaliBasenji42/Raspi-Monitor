@@ -69,12 +69,12 @@ types = {
              ['1', '4', '', ''],
              'Total CPU load as %, methodInfo[0] can be changed to change core'],
   'diskr': ['/proc/diskstats',
-             0.5,
+             2,
              3,
              ['24', '5', ''],
              'KB read on disk (sectors (512 Bytes) * 2 )'],
   'diskw': ['/proc/diskstats',
-             0.5,
+             2,
              3,
              ['24', '9', ''],
              'KB written on disk (sectors (512 Bytes) * 2 )']
@@ -101,6 +101,18 @@ def strToFloat(string):
   
 
 def lenNum(string, length): # Makes number string length
+  
+  if strToFloat(string) >= 10 ** length:
+    
+    num = strToFloat(string)
+    pwr = 0
+    
+    while num >= 10:
+      pwr += 1
+      num = num / 10
+    
+    return str(num)[:3] + 'e' + str(pwr)
+    
   
   string = string[:length]
   
