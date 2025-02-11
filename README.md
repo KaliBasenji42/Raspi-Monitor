@@ -2,6 +2,8 @@
 
 This is python script that reads `/sys` and `/proc` (or similar). It takes the values and graphs them overtime. There are different graph and system variables that can be edited, it is explained when ran. These variables are stored in the `values` dictionary for easy access.
 
+[Somewhat usefull Documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
+
 # Method
 
 `values['method']` and `values['methodInfo']` tells the script how to read files. `values['method']` is a float passed into a function, changed to an interger, and then compared with many elif's. This causies different behaviors. `values['methodInfo']` is a list of strings that stores data needed for handling each method.
