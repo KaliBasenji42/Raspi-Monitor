@@ -69,15 +69,15 @@ types = {
              ['1', '4', '', ''],
              'Total CPU load as %, methodInfo[0] can be changed to change core'],
   'diskr': ['/proc/diskstats',
-             1,
+             0.5,
              3,
-             ['24', '6', ''],
-             'Milliseconds spent reading disk'],
+             ['24', '5', ''],
+             'KB read on disk (sectors (512 Bytes) * 2 )'],
   'diskw': ['/proc/diskstats',
-             1,
+             0.5,
              3,
-             ['24', '10', ''],
-             'Milliseconds spent writing disk']
+             ['24', '9', ''],
+             'KB written on disk (sectors (512 Bytes) * 2 )']
 }
 
 colorKey = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
