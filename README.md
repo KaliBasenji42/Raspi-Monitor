@@ -6,7 +6,7 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
 
 # Method
 
-`values['method']` and `values['methodInfo']` tells the script how to read files. `values['method']` is a float passed into a function, changed to an interger, and then compared with many elif's. This causies different behaviors. `values['methodInfo']` is a list of strings that stores data needed for handling each method.
+`values['method']` and `values['methodInfo']` tells the script how to read files. `values['method']` is a float passed into a function, changed to an interger, and then compared with many elif's. This causes different behaviors. `values['methodInfo']` is a list of strings that stores data needed for handling each method.
 
 ## Each Method:
 
