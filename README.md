@@ -4,41 +4,73 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
 
 [Somewhat usefull Documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
 
-# Input (Printed on Startup)
+# Printed Documentation
 
-`
-Inputs:  
-  Case does not matter  
-  Numbers are validated before use  
-    (if logLen is set to -5.2 it will be treated as 1)  
-  If there is a error with getCont(), 0 is returned  
-  
-  "quit": Quits  
-  "run": Run graph loop (must kill program to stop)  
-  "spf": Seconds per frame for graph, Default: 1  
-  "logLen": How many lines are recorded, Default: 20  
-  "numLen": Length of ending number, Default: 6  
-  "import": Import graph settings from settings.txt  
-  "?": Reprint this  
-  
-  "path": File path for data file, Defualt: (for thermal)  
-  "scale": Scale of return value, Default: 1000  
-  "method": Method for gathering info, Default: 0  
-  "methodInfo": Other info needed for gathering data, Default: ["0"]  
-  "type": Looks up paths saved in list for data file  
-  "type?": Print types in array noted above  
-  
-  "barMin": Default: 20  
-  "barMax": Default: 100  
-  "barLen": number of chars in bar, Default: 50  
-  "barMed": Medium Threshold (0 to 1), Default: 0.7  
-  "barHi": High Threshold (0 to 1), Default: 0.85  
-  "barChr": Character used in bar, Default: "="  
-  "barLoC": Low color, Default: 32 (green)  
-  "barMedC": Medium color, Default: 33 (yellow)  
-  "barHiC": High color, Default: 31 (red)  
-  "c?": Print color key  
-`
+## General (Printed on Start)
+
+<pre style="overflow-x: scroll;">
+Inputs:
+  Case does not matter
+  Numbers are validated before use
+    (if logLen is set to -5.2 it will be treated as 1)
+  If there is a error with getCont(), 0 is returned
+
+  "quit": Quits
+  "run": Run graph loop (must kill program to stop)
+  "spf": Seconds per frame for graph, Default: 1
+  "logLen": How many lines are recorded, Default: 20
+  "numLen": Length of ending number, Default: 6
+  "import": Import graph settings from settings.txt
+  "?": Reprint this
+
+  "path": File path for data file, Defualt: (for thermal)
+  "scale": Scale of return value, Default: 1000
+  "method": Method for gathering info, Default: 0
+  "methodInfo": Other info needed for gathering data, Default: ["0"]
+  "type": Looks up paths saved in list for data file
+  "type?": Print types in array noted above
+
+  "barMin": Default: 20 
+  "barMax": Default: 100
+  "barLen": number of chars in bar, Default: 50
+  "barMed": Medium Threshold (0 to 1), Default: 0.7
+  "barHi": High Threshold (0 to 1), Default: 0.85
+  "barChr": Character used in bar, Default: "="
+  "barLoC": Low color, Default: 32 (green)
+  "barMedC": Medium color, Default: 33 (yellow)
+  "barHiC": High color, Default: 31 (red)
+  "c?": Print color key
+</pre>
+
+## Color Key
+
+<pre style="overflow-x: scroll;">
+red: 31
+green: 32
+yellow: 33
+blue: 34
+magenta: 35
+cyan: 36
+</pre>
+
+## Types Array
+
+<pre style="overflow-x: scroll;">
+thermal: /sys/class/thermal/thermal_zone0/temp, scale: 1000, method: 0, methodInfo: ['0']
+  Core temp in Celcius
+memfr: /proc/meminfo, scale: 1024, method: 0, methodInfo: ['1']
+  Free memory in MB
+netrx: /sys/class/net/eth0/statistics/rx_bytes, scale: 1, method: 1, methodInfo: ['0', '']
+  Bytes received. "eth0" can be interchanged for different network device
+nettx: /sys/class/net/eth0/statistics/tx_bytes, scale: 1, method: 1, methodInfo: ['0', '']
+  Bytes transmitted. "eth0" can be interchanged for different network device
+cpuload: /proc/stat, scale: 0.01, method: 2, methodInfo: ['1', '4', '', '']
+  Total CPU load as %, methodInfo[0] can be changed to change core
+diskr: /proc/diskstats, scale: 2, method: 3, methodInfo: ['24', '5', '']
+  KB read on disk (sectors (512 Bytes) * 2 )
+diskw: /proc/diskstats, scale: 2, method: 3, methodInfo: ['24', '9', '']
+  KB written on disk (sectors (512 Bytes) * 2 )
+</pre>
 
 # Method
 
