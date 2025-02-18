@@ -7,37 +7,37 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
 # Input (Printed on Startup)
 
 `
-Inputs:
-  Case does not matter
-  Numbers are validated before use
-    (if logLen is set to -5.2 it will be treated as 1)
-  If there is a error with getCont(), 0 is returned
-
-  "quit": Quits
-  "run": Run graph loop (must kill program to stop)
-  "spf": Seconds per frame for graph, Default: 1
-  "logLen": How many lines are recorded, Default: 20
-  "numLen": Length of ending number, Default: 6
-  "import": Import graph settings from settings.txt
-  "?": Reprint this
-
-  "path": File path for data file, Defualt: (for thermal)
-  "scale": Scale of return value, Default: 1000
-  "method": Method for gathering info, Default: 0
-  "methodInfo": Other info needed for gathering data, Default: ["0"]
-  "type": Looks up paths saved in list for data file
-  "type?": Print types in array noted above
-
-  "barMin": Default: 20
-  "barMax": Default: 100
-  "barLen": number of chars in bar, Default: 50
-  "barMed": Medium Threshold (0 to 1), Default: 0.7
-  "barHi": High Threshold (0 to 1), Default: 0.85
-  "barChr": Character used in bar, Default: "="
-  "barLoC": Low color, Default: 32 (green)
-  "barMedC": Medium color, Default: 33 (yellow)
-  "barHiC": High color, Default: 31 (red)
-  "c?": Print color key
+Inputs:  
+  Case does not matter  
+  Numbers are validated before use  
+    (if logLen is set to -5.2 it will be treated as 1)  
+  If there is a error with getCont(), 0 is returned  
+  
+  "quit": Quits  
+  "run": Run graph loop (must kill program to stop)  
+  "spf": Seconds per frame for graph, Default: 1  
+  "logLen": How many lines are recorded, Default: 20  
+  "numLen": Length of ending number, Default: 6  
+  "import": Import graph settings from settings.txt  
+  "?": Reprint this  
+  
+  "path": File path for data file, Defualt: (for thermal)  
+  "scale": Scale of return value, Default: 1000  
+  "method": Method for gathering info, Default: 0  
+  "methodInfo": Other info needed for gathering data, Default: ["0"]  
+  "type": Looks up paths saved in list for data file  
+  "type?": Print types in array noted above  
+  
+  "barMin": Default: 20  
+  "barMax": Default: 100  
+  "barLen": number of chars in bar, Default: 50  
+  "barMed": Medium Threshold (0 to 1), Default: 0.7  
+  "barHi": High Threshold (0 to 1), Default: 0.85  
+  "barChr": Character used in bar, Default: "="  
+  "barLoC": Low color, Default: 32 (green)  
+  "barMedC": Medium color, Default: 33 (yellow)  
+  "barHiC": High color, Default: 31 (red)  
+  "c?": Print color key  
 `
 
 # Method
