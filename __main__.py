@@ -365,8 +365,11 @@ while run:
           
           match = False
           
+          print('Key: "' + key + '"')
+          print('Val: "' + val + '"')
+          
           for vKey in values:
-            if vKey == key: match = True
+            if vKey.lower() == key: match = True
           
           if match:
             
