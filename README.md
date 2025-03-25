@@ -37,7 +37,7 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
       
       Print/Render
       
-      Timing / FPS
+      Timing/FPS
       
     }
     
