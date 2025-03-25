@@ -5,3 +5,4 @@ bArChr: +uoiaysodu
 barChr: |
 path: Test1
 log: settings.txt
+methodinfo: 1 2 3
