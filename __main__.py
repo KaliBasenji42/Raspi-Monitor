@@ -590,10 +590,12 @@ while run:
     
     if shouldLog:
       
+      print(shouldLog)
+      
       try:
         with open(values['log'], 'a') as file:
           t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-          file.write(t + ': ' + cont)
+          file.write(str(t) + ': ' + str(cont))
       except Exception as e:
         debug = str(e)
       
