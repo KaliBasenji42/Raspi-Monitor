@@ -358,7 +358,7 @@ while run:
         
         for line in cont:
           
-          line = line.replace('\n', '') + ': '
+          line = line.replace('\n', '') + ':  '
           
           pair = line.split(': ', 1)
           

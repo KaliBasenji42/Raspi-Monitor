@@ -3,3 +3,5 @@ Test1
 Test2 Elecctric Boogaloo
 bArChr: +uoiaysodu
 barChr: |
+path: Test1
+log: settings.txt
