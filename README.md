@@ -4,7 +4,9 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
 
 [Somewhat usefull Documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
 
-## File Structure
+# File Structures
+
+## __main__.py
 
 <pre style="overflow-x: scroll;">
   Import
@@ -44,6 +46,34 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
   }
 </pre>
 
+## Settings
+
+Formated like how you change the values in the program, with ": " seperating key and value. And each line being a new key-value pair.
+
+<pre style="overflow-x: scroll;">
+  [Key]: [Val]
+</pre>
+
+EX:
+
+<pre style="overflow-x: scroll;">
+  barChr: |
+  bArmIn: 0.9haksd
+</pre>
+
+## Log
+
+<pre style="overflow-x: scroll;">
+  YYYY-MM-DD HH:MM:SS: ### at "Path"
+</pre>
+
+EX:
+
+<pre style="overflow-x: scroll;">
+   2025-03-25 3:34:51 in "/sys/class/thermal/thermal_zone0/temp": 95.32
+   2025-03-25 3:35:06 in "/sys/class/thermal/thermal_zone0/temp": -1.0
+</pre>
+
 # Printed Documentation
 
 ## General (Printed on Start)
@@ -60,8 +90,14 @@ Inputs:
   "spf": Seconds per frame for graph, Default: 1
   "logLen": How many lines are recorded, Default: 20
   "numLen": Length of ending number, Default: 6
-  "import": Import graph settings from settings.txt
   "?": Reprint this
+
+  "import": Import settings from file (.txt) (Will ask for file name)
+  "doLog": Log or not, 1 = True, else False, Default: 0 (False)
+  "log": Set path of log file, Default: "log.txt"
+  "logMax": Lower value of logging range (inclusive), Default: 90
+  "logMin": Upper value of logging range (inclusive), Default: 0
+  "logInc": Is inclusive of range (if not, exclusive), 1 = True, else False, Default: 0 (False)
 
   "path": File path for data file, Defualt: (for thermal)
   "scale": Scale of return value, Default: 1000
