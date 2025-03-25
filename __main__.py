@@ -1,6 +1,7 @@
 import time
 import sys
 import select
+from datetime import datetime
 
 # Variables
 
@@ -25,7 +26,7 @@ values = { # Value Settings, explained in instructions
   'log': 'log.txt',
   'logMax': 100.0,
   'logMin': 0.0,
-  'logInc': False,
+  'logInc': 0.0,
 
   'spf': 1.0,
   'logLen': 20.0,
@@ -279,9 +280,9 @@ instructions = [
   '',
   '  "import": Import settings from file (.txt) (Will ask for file name)',
   '  "log": Set path of log file, Default: "log.txt"',
-  '  "logMax": Lower value of logging range, Default: 100',
-  '  "logMin": Upper value of logging range, Default: 0',
-  '  "logInc": Is inclusive of range (or not), Default: False',
+  '  "logMax": Lower value of logging range (inclusive), Default: 90',
+  '  "logMin": Upper value of logging range (inclusive), Default: 0',
+  '  "logInc": Is inclusive of range (if not, exclusive), 1.0 = True, else False, Default: 0.0 (False)',
   '',
   '  "path": File path for data file, Defualt: (for thermal)',
   '  "scale": Scale of return value, Default: 1000',
@@ -576,6 +577,26 @@ while run:
     except Exception as e:
       cont = 0
       debug = str(e)
+    
+    # Log
+    
+    shouldLog = False
+    
+    if values['logInc'] == 1.0:
+      if cont >= values['logMin'] and cont <= values['logMax']: shouldLog = True
+    else:
+      if cont <= values['logMin']: shouldLog = True
+      if cont >= values['logMax']: shouldLog = True
+    
+    if shouldLog:
+      
+      try:
+        with open(values['log'], 'a') as file:
+          t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+          file.write(t + ': ' + cont)
+      except Exception as e:
+        debug = str(e)
+      
     
     # Print
     
