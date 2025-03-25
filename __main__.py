@@ -590,7 +590,7 @@ while run:
     
     if shouldLog:
       
-      debug = shouldLog
+      debug = str(shouldLog)
       
       try:
         with open(values['log'], 'a') as file:
