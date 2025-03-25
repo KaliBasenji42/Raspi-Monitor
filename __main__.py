@@ -346,14 +346,17 @@ while run:
     
     elif inp == 'import':
       
+      valInp = input('Path: ')
+      print()
+      
       try:
-        with open(settingsFile, 'r') as file: pass
+        with open(valInp, 'r') as file: pass
       except:
-        print('\nUnable to Open file :/')
+        print('Unable to Open :/')
       
       else:
         
-        print('WIP')
+        for line in file: print(line[:-1])
         
       
     
