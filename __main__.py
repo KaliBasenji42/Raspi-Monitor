@@ -597,7 +597,7 @@ while run:
       try:
         with open(values['log'], 'a') as file:
           t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-          file.write(str(t) + ': ' + str(cont) + '\n')
+          file.write(str(t) + ' in "' + values['path'] + '": ' + str(cont) + '\n')
       except Exception as e:
         debug = str(e)
       
