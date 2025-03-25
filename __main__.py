@@ -358,7 +358,9 @@ while run:
         
         for line in cont:
           
-          pair = line[:-1].split(': ', 1)
+          line = line.replace('\n', '') + ': '
+          
+          pair = line.split(': ', 1)
           
           key = pair[0].lower()
           val = pair[1]
