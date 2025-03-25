@@ -1,3 +1,5 @@
-WIP
+spf: 2
 Test1
 Test2 Elecctric Boogaloo
+bArChr: +uoiaysodu
+barChr: |

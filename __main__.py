@@ -8,7 +8,7 @@ run = True # Run Main Program Loop
 
 cont = 0 # Value read from file (graphed value/output)
 
-runGraph = True # Run Graph Loop
+runGraph = True # Should Run Graph Loop (Stops "Run" if it will encounter known bugs)
 graphing = False # Graph Loop Running (Unused? ¯\_(ツ)_/¯)
 
 debug = '' # Debug str shown on first line of graph when not empty
@@ -356,7 +356,72 @@ while run:
       
       else:
         
-        for line in cont: print(line[:-1])
+        for line in cont:
+          
+          pair = line[:-1].split(': ', 1)
+          
+          key = pair[0].lower()
+          val = pair[1]
+          
+          match = False
+          
+          for vKey in values:
+            if vKey == key: match = True
+          
+          if match:
+            
+            # String
+            
+            if key == 'log':
+              
+              try:
+                with open(val, 'r') as file: pass
+              except:
+                print('Unable to Open :/')
+                runGraph = False
+              else:
+                values['log'] = val
+                print('"log" set to "' + values['log'] + '"')
+                runGraph = True
+              
+            
+            elif key == 'path':
+              
+              try:
+                with open(val, 'r') as file: pass
+              except:
+                print('Unable to Open :/')
+                runGraph = False
+              else:
+                values['path'] = val
+                print('"path" set to "' + values['path'] + '"')
+                runGraph = True
+              
+            
+            elif key == 'barchr':
+              
+              values['barChr'] = (val + ' ')[0]
+              print('"barChr" set to "' + values['barChr'] + '"')
+              
+            
+            # Array
+            
+            elif key == "methodinfo":
+              
+              values['methodInfo'] = val.split()
+              print('"methodInfo" set to "' + str(values['methodInfo']) + '"')
+              
+            
+            # All Other
+            
+            else:
+              
+              values[key] = strToFloat(val)
+              
+              print('"' + key +'" set to "' + str(values[key]) + '"')
+              
+            
+          
         
       
     
