@@ -4,6 +4,46 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
 
 [Somewhat usefull Documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
 
+## File Structure
+
+<pre style="overflow-x: scroll;">
+  Import
+  
+  Vars
+  
+  Functions
+  
+  Pre-Loop (File and Printing Stuff)
+  
+  Main Loop {
+    
+    Input Loop {
+      
+      Many elifs in series
+      
+      Else/Base case (floats in 'values' dictionary)
+      
+      Break to exit
+      
+    }
+    
+    Pre-Graphing
+    
+    Graphing Loop {
+      
+      Break to exit
+      
+      Get Value
+      
+      Print/Render
+      
+      Timing / FPS
+      
+    }
+    
+  }
+</pre>
+
 # Printed Documentation
 
 ## General (Printed on Start)

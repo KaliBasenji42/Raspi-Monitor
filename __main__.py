@@ -4,18 +4,18 @@ import select
 
 # Variables
 
-run = True
+run = True # Run Main Program Loop
 
-cont = 0
+cont = 0 # Value read from file (graphed value/output)
 
-runGraph = True
-graphing = False
+runGraph = True # Run Graph Loop
+graphing = False # Graph Loop Running (Unused? ¯\_(ツ)_/¯)
 
-debug = ''
+debug = '' # Debug str shown on first line of graph when not empty
 
 # Defaults
 
-values = {
+values = { # Value Settings, explained in instructions
 
   'path': '/sys/class/thermal/thermal_zone0/temp',
   'scale': 1000,
@@ -44,6 +44,7 @@ values = {
 }
 
 # Keys
+# (Printed Info)
 
 types = {
   'thermal': ['/sys/class/thermal/thermal_zone0/temp',
@@ -85,9 +86,9 @@ types = {
 
 colorKey = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
 
-# Function
+# Functions
 
-def strToFloat(string):
+def strToFloat(string): # Converts string to float, returns 0 if no number, ignores non-numeric characters
   
   numStr = ''
   
@@ -103,7 +104,7 @@ def strToFloat(string):
   else: return float(numStr)
   
 
-def lenNum(string, length): # Makes number string length
+def lenNum(string, length): # Returns number str to str of length 'length'
   
   if strToFloat(string) >= 10 ** length:
     
@@ -129,6 +130,7 @@ def lenNum(string, length): # Makes number string length
   
 
 def bar(val, minimum, maximum, length, medium, high, char, loColor, medColor, hiColor):
+  # Creates a bar (str) for the graph
   
   # Validating
   
@@ -167,7 +169,7 @@ def bar(val, minimum, maximum, length, medium, high, char, loColor, medColor, hi
   return out
   
 
-def printLog(log, new):
+def printLog(log, new): # Prints log with new entry
   
   # Roll
   
@@ -187,7 +189,7 @@ def printLog(log, new):
   return log
   
 
-def getCont(path, method):
+def getCont(path, method): # Gets value from file (uses methods)
   
   out = 0
   
@@ -250,7 +252,7 @@ def getCont(path, method):
   
   return out / values['scale']
   
-def detectKey():
+def detectKey(): # Detects key press (used for exiting graph loop)
   
   if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
     key = sys.stdin.read(1)
@@ -406,6 +408,22 @@ while run:
       
     
     # String Input
+    
+    elif inp == 'log':
+      
+      valInp = input('"log": ')
+      print()
+      
+      try:
+        with open(valInp, 'r') as file: pass
+      except:
+        print('Unable to Open :/')
+        runGraph = False
+      else:
+        values['log'] = valInp
+        print('"log" set to "' + values['log'] + '"')
+        runGraph = True
+      
     
     elif inp == 'path':
       
