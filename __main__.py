@@ -350,13 +350,13 @@ while run:
       print()
       
       try:
-        with open(valInp, 'r') as file: pass
+        with open(valInp, 'r') as file: cont = file.readlines()
       except:
         print('Unable to Open :/')
       
       else:
         
-        for line in file: print(line[:-1])
+        for line in cont: print(line[:-1])
         
       
     
