@@ -379,7 +379,7 @@ while run:
               try:
                 with open(val, 'r') as file: pass
               except:
-                print('Unable to Open "' + key + '" :/')
+                print('Unable to Open "' + val + '" :/')
                 runGraph = False
               else:
                 values['log'] = val
@@ -392,7 +392,7 @@ while run:
               try:
                 with open(val, 'r') as file: pass
               except:
-                print('Unable to Open "' + key + '" :/')
+                print('Unable to Open "' + val + '" :/')
                 runGraph = False
               else:
                 values['path'] = val
