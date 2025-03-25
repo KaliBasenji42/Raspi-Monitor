@@ -11,8 +11,6 @@ cont = 0
 runGraph = True
 graphing = False
 
-settingsFile = 'settings.txt'
-
 debug = ''
 
 # Defaults
@@ -24,6 +22,11 @@ values = {
   'method': 0,
   'methodInfo': ['0'],
 
+  'log': 'log.txt',
+  'logMax': 100.0,
+  'logMin': 0.0,
+  'logInc': False,
+
   'spf': 1.0,
   'logLen': 20.0,
   'numLen': 6.0,
@@ -33,7 +36,7 @@ values = {
   'barLen': 50.0,
   'barMed': .7,
   'barHi': .85,
-  'barChr': '=',
+  'barChr': '|',
   'barLoC': 32.0,
   'barMedC': 33.0,
   'barHiC': 31.0
@@ -272,10 +275,10 @@ instructions = [
   '  "numLen": Length of ending number, Default: 6',
   '  "?": Reprint this',
   '',
-  '  "import": Import graph settings from settings.txt',
+  '  "import": Import settings from file (.txt) (Will ask for file name)',
   '  "log": Set path of log file, Default: "log.txt"',
-  '  "logMax": ???, Default: 100',
-  '  "logMin": ???, Default: 0',
+  '  "logMax": Lower value of logging range, Default: 100',
+  '  "logMin": Upper value of logging range, Default: 0',
   '  "logInc": Is inclusive of range (or not), Default: False',
   '',
   '  "path": File path for data file, Defualt: (for thermal)',
