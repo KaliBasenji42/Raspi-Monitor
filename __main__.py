@@ -280,7 +280,7 @@ instructions = [
   '  "?": Reprint this',
   '',
   '  "import": Import settings from file (.txt) (Will ask for file name)',
-  '  "doLog": Log or not, 1 = True, else False, Default: 0 (False)'
+  '  "doLog": Log or not, 1 = True, else False, Default: 0 (False)',
   '  "log": Set path of log file, Default: "log.txt"',
   '  "logMax": Lower value of logging range (inclusive), Default: 90',
   '  "logMin": Upper value of logging range (inclusive), Default: 0',
