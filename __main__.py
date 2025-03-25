@@ -360,15 +360,12 @@ while run:
           
           line = line.replace('\n', '') + ':  '
           
-          pair = line.split(': ', 1)
+          pair = line.split(': ')
           
           key = pair[0].lower()
           val = pair[1]
           
           match = False
-          
-          print('Key: "' + key + '"')
-          print('Val: "' + val + '"')
           
           for vKey in values:
             if vKey.lower() == key: match = True
