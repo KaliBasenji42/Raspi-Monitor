@@ -298,7 +298,7 @@ instructions = [
   '  "barLen": number of chars in bar, Default: 50',
   '  "barMed": Medium Threshold (0 to 1), Default: 0.7',
   '  "barHi": High Threshold (0 to 1), Default: 0.85',
-  '  "barChr": Character used in bar, Default: "="',
+  '  "barChr": Character used in bar, Default: "|"',
   '  "barLoC": Low color, Default: 32 (green)',
   '  "barMedC": Medium color, Default: 33 (yellow)',
   '  "barHiC": High color, Default: 31 (red)',
