@@ -14,11 +14,11 @@ runGraph = True # Should Run Graph Loop (Stops "Run" if it will encounter known 
 
 error = '' # Error str shown on first line of graph when not empty
 
-errLogger = logging.getLogger(__name__) # Logger for Errors
-errLogger.addHandler(logging.FileHandler('app.log'))
-
-logLogger = logging.getLogger(__name__) # Logger for Log
-logLogger.addHandler(logging.FileHandler('log.log'))
+logger = logging.getLogger(__name__) # Logger for Errors
+logHandler = logging.FileHandler('app.log')
+logFormatter = logging.Formatter("%(asctim)s: %(message)s")
+logHandler.setFormatter(logFormatter)
+logger.addHandler(logHandler)
 
 # Defaults
 
@@ -30,7 +30,7 @@ values = { # Value Settings, explained in instructions
   'methodInfo': ['0'],
   
   'doLog': 0.0,
-  'log': 'log.log',
+  'log': 'log.txt',
   'logMax': 100.0,
   'logMin': 0.0,
   'logInc': 0.0,
@@ -287,7 +287,7 @@ instructions = [
   '',
   '  "import": Import settings from file (.txt) (Will ask for file name)',
   '  "doLog": Log or not, 1 = True, else False, Default: 0 (False)',
-  '  "log": Set path of log file, Default: "log.log"',
+  '  "log": Set path of log file, Default: "log.txt"',
   '  "logMax": Lower value of logging range (inclusive), Default: 90',
   '  "logMin": Upper value of logging range (inclusive), Default: 0',
   '  "logInc": Is inclusive of range (if not, exclusive), 1 = True, else False, Default: 0 (False)',
@@ -579,7 +579,7 @@ while run:
     try:
       cont = getCont(values['path'], values['method'])
     except Exception as e:
-      if str(e) != error: errLogger.exception(e)
+      if str(e) != error: logger.exception(e)
       cont = 0
       error = str(e)
     
@@ -594,7 +594,15 @@ while run:
       if cont >= values['logMax']: shouldLog = True
     
     if shouldLog and values['doLog'] == 1.0:
-      logLogger.warning(str(cont))
+      
+      try:
+        with open(values['log'], 'a') as file:
+          t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+          file.write(str(t) + ' in "' + values['path'] + '": ' + str(cont) + '\n')
+      except Exception as e:
+        if str(e) != error: logger.exception(e)
+        error = str(e)
+      
     
     # Print
     
