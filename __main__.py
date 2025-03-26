@@ -560,11 +560,14 @@ while run:
   
   # Pre-Graph
   
-  contLog = [''] * int(max(values['logLen'], 1))
-  
-  print('Enter "q" to return to Input (wait until loop has ended)')
-  
-  for entry in contLog: print('')
+  if runGraph:
+    
+    contLog = [''] * int(max(values['logLen'], 1))
+    
+    print('Enter "q" to return to Input (wait until loop has ended)')
+    
+    for entry in contLog: print('')
+    
   
   # Graph Loop
   
