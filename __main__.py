@@ -1,6 +1,7 @@
 import time
 import sys
 import select
+import logging
 from datetime import datetime
 
 # Variables
@@ -10,9 +11,14 @@ run = True # Run Main Program Loop
 cont = 0 # Value read from file (graphed value/output)
 
 runGraph = True # Should Run Graph Loop (Stops "Run" if it will encounter known bugs)
-graphing = False # Graph Loop Running (Unused? ¯\_(ツ)_/¯)
 
-debug = '' # Debug str shown on first line of graph when not empty
+error = '' # Error str shown on first line of graph when not empty
+
+errLogger = logging.getLogger(__name__) # Logger for Errors
+errLogger.addHandler(logging.FileHandler('app.log'))
+
+logLogger = logging.getLogger(__name__) # Logger for Log
+logLogger.addHandler(logging.FileHandler('log.log'))
 
 # Defaults
 
@@ -24,7 +30,7 @@ values = { # Value Settings, explained in instructions
   'methodInfo': ['0'],
   
   'doLog': 0.0,
-  'log': 'log.txt',
+  'log': 'log.log',
   'logMax': 100.0,
   'logMin': 0.0,
   'logInc': 0.0,
@@ -179,8 +185,8 @@ def printLog(log, new): # Prints log with new entry
   
   log.append(new)
 
-  global debug
-  if debug != '': log[0] = debug
+  global error
+  if error != '': log[0] = error
   
   # Print
   
@@ -281,7 +287,7 @@ instructions = [
   '',
   '  "import": Import settings from file (.txt) (Will ask for file name)',
   '  "doLog": Log or not, 1 = True, else False, Default: 0 (False)',
-  '  "log": Set path of log file, Default: "log.txt"',
+  '  "log": Set path of log file, Default: "log.log"',
   '  "logMax": Lower value of logging range (inclusive), Default: 90',
   '  "logMin": Upper value of logging range (inclusive), Default: 0',
   '  "logInc": Is inclusive of range (if not, exclusive), 1 = True, else False, Default: 0 (False)',
@@ -318,8 +324,6 @@ except:
 # Main Loop
 
 while run:
-  
-  graphing = False
   
   # Inupt Loop
   
@@ -561,8 +565,6 @@ while run:
   
   for entry in contLog: print('')
   
-  graphing = True
-  
   # Graph Loop
   
   while runGraph:
@@ -577,8 +579,9 @@ while run:
     try:
       cont = getCont(values['path'], values['method'])
     except Exception as e:
+      if str(e) != error: errLogger.exception(e)
       cont = 0
-      debug = str(e)
+      error = str(e)
     
     # Log
     
@@ -591,16 +594,7 @@ while run:
       if cont >= values['logMax']: shouldLog = True
     
     if shouldLog and values['doLog'] == 1.0:
-      
-      debug = str(shouldLog)
-      
-      try:
-        with open(values['log'], 'a') as file:
-          t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-          file.write(str(t) + ' in "' + values['path'] + '": ' + str(cont) + '\n')
-      except Exception as e:
-        debug = str(e)
-      
+      logLogger.warning(str(cont))
     
     # Print
     
