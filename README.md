@@ -83,7 +83,8 @@ Inputs:
   Case does not matter
   Numbers are validated before use
     (if logLen is set to -5.2 it will be treated as 1)
-  If there is a error with getCont(), 0 is returned
+  If there is an error with getCont(), 0 is returned
+  For inputs that set values, input key/name, then you will be prompted to set value
 
   "quit": Quits
   "run": Run graph loop (must kill program to stop)
