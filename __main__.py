@@ -17,7 +17,7 @@ lastErr = '' # Used to prevent logging repeats
 
 logging.basicConfig( # Logging
     level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='%(asctime)s:\n %(message)s\n',
     filename='app.log'
 )
 
