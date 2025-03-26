@@ -15,11 +15,11 @@ runGraph = True # Should Run Graph Loop (Stops "Run" if it will encounter known 
 error = '' # Error str shown on first line of graph when not empty
 lastErr = '' # Used to prevent logging repeats
 
-logger = logging.getLogger(__name__) # Logger for Errors
-logHandler = logging.FileHandler('app.log')
-logFormatter = logging.Formatter("%(asctim)s: %(message)s")
-logHandler.setFormatter(logFormatter)
-logger.addHandler(logHandler)
+logging.basicConfig( # Logging
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    filename='app.log'
+)
 
 # Defaults
 
@@ -584,7 +584,7 @@ while run:
     try:
       cont = getCont(values['path'], values['method'])
     except Exception as e:
-      if e != lastErr: logger.exception(e)
+      if e != lastErr: logging.exception(e)
       lastErr = e
       cont = 0
       error = 'Error Getting Content'
@@ -606,7 +606,7 @@ while run:
           t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
           file.write(str(t) + ' in "' + values['path'] + '": ' + str(cont) + '\n')
       except Exception as e:
-        if e != lastErr: logger.exception(e)
+        if e != lastErr: logging.exception(e)
         lastErr = e
         error = 'Error Writing to Log'
       
