@@ -13,7 +13,7 @@ cont = 0 # Value read from file (graphed value/output)
 runGraph = True # Should Run Graph Loop (Stops "Run" if it will encounter known bugs)
 
 error = '' # Error str shown on first line of graph when not empty
-lastErr # Used to prevent logging repeats
+lastErr = '' # Used to prevent logging repeats
 
 logger = logging.getLogger(__name__) # Logger for Errors
 logHandler = logging.FileHandler('app.log')
