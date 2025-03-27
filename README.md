@@ -1,8 +1,8 @@
 # Basics
 
-This is python script that reads `/sys` and `/proc` (or similar). It takes the values and graphs them overtime. There are different graph and system variables that can be edited, it is explained when ran. These variables are stored in the `values` dictionary for easy access.
+This is python script that reads `/sys` and `/proc` (or similar). It is made for Raspberry Pi OS, but should work similarly on other Linux OS's. It takes the values from the files and graphs them overtime. There are different graph and system variables that can be edited, it is explained when ran. These variables are stored in the `values` dictionary for easy access.
 
-[Somewhat usefull Documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
+[Somewhat usefull Linux documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
 
 # File Structures
 
@@ -37,6 +37,8 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
       
       Get Value
       
+      Log Logic
+      
       Print/Render
       
       Timing/FPS
@@ -46,7 +48,7 @@ This is python script that reads `/sys` and `/proc` (or similar). It takes the v
   }
 </pre>
 
-## Settings
+## Settings ("settings.txt" by default)
 
 Formated like how you change the values in the program, with ": " seperating key and value. And each line being a new key-value pair.
 
@@ -58,13 +60,13 @@ EX:
 
 <pre style="overflow-x: scroll;">
   barChr: |
-  bArmIn: 0.9haksd
+  bArmIn: 0.9haksd [Taken as "barMin: 0.9"]
 </pre>
 
-## Log
+## Log ("log.txt" by default)
 
 <pre style="overflow-x: scroll;">
-  YYYY-MM-DD HH:MM:SS: ### at "Path"
+  YYYY-MM-DD HH:MM:SS in "Path": ###
 </pre>
 
 EX:
