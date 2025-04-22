@@ -73,7 +73,7 @@ EX:
 
 <pre style="overflow-x: scroll;">
    2025-03-25 3:34:51 in "/sys/class/thermal/thermal_zone0/temp": 95.32
-   2025-03-25 3:35:06 in "/sys/class/thermal/thermal_zone0/temp": -1.0
+   2025-03-25 18:35:06 in "/sys/class/thermal/thermal_zone0/temp": -1.0
 </pre>
 
 # Printed Documentation
@@ -160,6 +160,6 @@ diskw: /proc/diskstats, scale: 2, method: 3, methodInfo: ['24', '9', '']
 | Method | Description | Equation | methodInfo | For |
 | ------ | ----------- | -------- | ---------- | --- |
 | 0 | Raw: Reads one line, converts string to float | N/A | [line] | Thermal, Memory |
-| 1 | Reads a single line of a cumlated value, and finds rate of change | out = (new - old) / `values['spf']` | [line, old] | Network |
+| 1 | Reads a single line of a cumulated value, and finds rate of change | out = (new - old) / `values['spf']` | [line, old] | Network |
 | 2 | Reads a line and breaks it into a list, sums the list for total and takes a position for another value | total = ((newTotal - oldTotal) / `values['spf']`), val = ((newVal - oldVal) / `values['spf']`), out = (total - val) / total | [line, valPos, oldTotal, oldVal] | CPU Load |
 | 3 | Similar to method 2 in structure, although only outputs a single value similar to method 1 | out = (new - old) / `values['spf']` | [line, valPos, oldVal] | Disk
