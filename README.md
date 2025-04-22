@@ -4,6 +4,10 @@ This is python script that reads `/sys` and `/proc` (or similar). It is made for
 
 [Somewhat usefull Linux documentation](https://www.kernel.org/doc/Documentation/ABI/testing/)
 
+## Screenshot (Raspi, Rasberry Pi Linux, through SSH on Chrome)
+
+![Screenshot 2025-04-22 9 15 01 AM](https://github.com/user-attachments/assets/b6599e9c-8f60-4995-830e-f8bc46cb009d)
+
 # File Structures
 
 ## __main__.py
@@ -131,6 +135,8 @@ blue: 34
 magenta: 35
 cyan: 36
 </pre>
+
+[Useful resource for terminal styling](https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences)
 
 ## Types Array
 
