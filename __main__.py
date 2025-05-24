@@ -16,7 +16,7 @@ error = '' # Error str shown on first line of graph when not empty
 lastErr = '' # Used to prevent logging repeats
 
 logging.basicConfig( # Logging
-    level=logging.DEBUG,
+    level=logging.ERROR,
     format='%(asctime)s:\n %(message)s\n',
     filename='app.log'
 )
